@@ -1,12 +1,14 @@
 package com.my.total_jpa_back.repository;
 
-import com.my.total_jpa_back.entity.OrderStatus;
-import com.my.total_jpa_back.entity.UserOrder;
+import com.my.total_jpa_back.common.entity.OrderStatus;
+import com.my.total_jpa_back.orders.entity.UserOrder;
+import com.my.total_jpa_back.orders.repository.UserOrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +18,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Slf4j
-class OrderRepositoryTest {
+class UserOrderRepositoryTest {
 
     @Autowired
-    OrderRepository orderRepository;
+    UserOrderRepository orderRepository;
+
+    // 주문 상태에 따른 오름차순 정렬 후 제품명에 대해 내림차순 정렬 후, 주문일 내림차순 1000개 출력
+    @Test
+    @DisplayName("주문 상태에 따른 오름차순 정렬 후 제품명에 대해 내림차순 정렬 후, 주문일 내림차순 100개 출력")
+    void multiSortTest() {
+        Sort sort = Sort.by("status").ascending()
+                .and(
+                        Sort.by("productName").descending()
+                                .and(
+                                        Sort.by("createdAt").descending()
+                                )
+                );
+
+        List<UserOrder> userOrders = orderRepository.findAll(sort);
+
+        userOrders.stream()
+                .limit(1000)
+                .forEach(
+                        x -> log.info("주문 상태 : {}, 제품명 : {}, 주문일 : {} "
+                                , x.getStatus(), x.getProductName(), x.getCreatedAt())
+                );
+    }
+
 
     @Test
     @DisplayName("전체 주문 조회")
@@ -136,9 +161,11 @@ class OrderRepositoryTest {
     @Test
     @DisplayName("상태 여러 개 조회(in)")
     void findByStatusIn() {
-        List<OrderStatus> statusList = new ArrayList<>();
-        statusList.add(OrderStatus.READY);
-        statusList.add(OrderStatus.SHIPPING);
+        List<OrderStatus> statusList = new ArrayList<>(
+                List.of(OrderStatus.READY, OrderStatus.SHIPPING)
+        );
+//        statusList.add(OrderStatus.READY);
+//        statusList.add(OrderStatus.SHIPPING);
 
         List<UserOrder> userOrders = orderRepository.findByStatusIn(statusList);
 

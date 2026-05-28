@@ -1,7 +1,7 @@
-package com.my.total_jpa_back.repository;
+package com.my.total_jpa_back.users.repository;
 
-import com.my.total_jpa_back.entity.Gender;
-import com.my.total_jpa_back.entity.Users;
+import com.my.total_jpa_back.common.entity.Gender;
+import com.my.total_jpa_back.users.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
