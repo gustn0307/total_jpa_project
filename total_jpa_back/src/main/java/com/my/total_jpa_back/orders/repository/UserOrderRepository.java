@@ -1,13 +1,13 @@
-package com.my.total_jpa_back.repository;
+package com.my.total_jpa_back.orders.repository;
 
 
-import com.my.total_jpa_back.entity.OrderStatus;
-import com.my.total_jpa_back.entity.UserOrder;
+import com.my.total_jpa_back.common.entity.OrderStatus;
+import com.my.total_jpa_back.orders.entity.UserOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OrderRepository extends JpaRepository<UserOrder, Long> {
+public interface UserOrderRepository extends JpaRepository<UserOrder, Long> {
     // 1. 전체 주문 조회
     // select * from user_order;
 
