@@ -1,0 +1,97 @@
+package com.my.total_jpa_back.users.controller;
+
+import com.my.total_jpa_back.common.entity.Gender;
+import com.my.total_jpa_back.users.entity.Users;
+import com.my.total_jpa_back.users.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+// Restful한 API를 다룰 때 사용하는 어노테이션
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api")
+public class UserController {
+
+    private final UserRepository userRepository;
+
+    // 전체 리스트를 요청
+    @GetMapping("/users")
+    public List<Users> findAll() {
+
+        return userRepository.findAll();
+    }
+
+    // Path Variable(경로 변수)로 준 성별을 가지는 회원 리스트 요청
+    @GetMapping("/gender/{gender}")
+    public List<Users> findByGender(@PathVariable Gender gender) {
+        return userRepository.findByGender(gender);
+    }
+
+    // Query Parameter(쿼리 파라미터)로 준 키워드를 포함하는 이름을 가진 회원 리스트 요청
+    @GetMapping("/name")
+    public List<Users> findByName(@RequestParam String keyword) {
+        return userRepository.findByNameContaining(keyword);
+    }
+
+    // Query Parameter(쿼리 파라미터)로 준 색상을 좋아하는 회원 리스트 요청
+    @GetMapping("/color")
+    public List<Users> findByLikeColor(@RequestParam String color) {
+        return userRepository.findByLikeColor(color);
+    }
+
+    // Query Parameter(쿼리 파라미터)로 준 색상과 성별을 각각 좋아하고 일치하는 회원 리스트 요청
+    @GetMapping("/color-gender")
+    public List<Users> findByLikeColorAndGender(
+            @RequestParam("color") String color,
+            @RequestParam("gender") Gender gender) {
+        return userRepository.findByLikeColorAndGender(color, gender);
+    }
+
+    // Query Parameter(쿼리 파라미터)로 준 키워드를 포함하는 이메일을 가진 회원 리스트 요청
+    @GetMapping("/email")
+    public List<Users> findByEmail(@RequestParam String keyword) {
+        return userRepository.findByEmailContaining(keyword);
+    }
+
+    // 이름 오름차순, 생성일 내림차순
+    @GetMapping("/sort")
+    public List<Users> findAllSort() {
+        Sort sort = Sort.by("name").ascending()
+                .and(
+                        Sort.by("CreatedAt").descending()
+                );
+
+        return userRepository.findAll(sort);
+    }
+
+    @GetMapping("/page")
+    public Page<Users> findAllPage(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("createdAt").descending()
+        );
+
+        return userRepository.findAll(pageable);
+    }
+
+    @GetMapping("/slice")
+    public Slice<Users> findAllSlice(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("createdAt").descending()
+        );
+
+        return userRepository.findAllBy(pageable);
+    }
+}
