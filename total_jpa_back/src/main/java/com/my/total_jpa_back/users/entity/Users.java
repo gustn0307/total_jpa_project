@@ -2,9 +2,13 @@ package com.my.total_jpa_back.users.entity;
 
 import com.my.total_jpa_back.common.entity.BaseEntity;
 import com.my.total_jpa_back.common.entity.Gender;
+import com.my.total_jpa_back.orders.entity.UserOrder;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +29,12 @@ public class Users extends BaseEntity {
 
     @Column(name = "like_color")
     private String likeColor;
+
+//    // Users 엔티티의 user가 연관관계의 주인이다.
+//    // orphanRemoval : 부모 정보가 없어지면 자식 정보도 지울 것인지 설정하는 설정
+//    // mappedBy : @ManyToOne에서 Users에서 @Id가 붙어있는 ID값이 같은 연관관계를 맵핑
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) // UserOrder의 객체 Users user와 맵핑
+//    private List<UserOrder> orders = new ArrayList<>();
 
     @Override
     public String toString() {

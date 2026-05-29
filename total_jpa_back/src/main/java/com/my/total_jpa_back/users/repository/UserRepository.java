@@ -5,10 +5,24 @@ import com.my.total_jpa_back.users.entity.Users;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<Users, Long> {
+
+    // JPQL : 자바 기반의 SQL
+
+    // 테이블명이 아닌 자바의 엔티티 기준으로 쿼리문 작성
+    // Alias를 꼭 적어줘야 한다.
+    // fetch join : join 뒤에 fetch를 붙여줘야 한 번에 모든 정보를 가져온다.(가져오는 값이 List인 경우에만 붙인다.)
+//    @Query("""
+//    select distinct u
+//        from Users u
+//            join fetch u.orders
+//    """)
+//    List<Users> findAllWithOrders();
+
 
     // Query Method(쿼리 메서드) : 테이블 한 개에서 조회할 때 사용, join 불가
     // 1. 성별 조회

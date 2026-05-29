@@ -1,6 +1,7 @@
 package com.my.total_jpa_back.repository;
 
 import com.my.total_jpa_back.common.entity.OrderStatus;
+import com.my.total_jpa_back.orders.dto.OrderResponse;
 import com.my.total_jpa_back.orders.entity.UserOrder;
 import com.my.total_jpa_back.orders.repository.UserOrderRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,45 @@ class UserOrderRepositoryTest {
 
     @Autowired
     UserOrderRepository orderRepository;
+
+    //
+//    @Test
+//    @Transactional
+//    @DisplayName("DTO로 결과 받기")
+//    void dtoResultTest() {
+//        List<OrderResponse> result = orderRepository.findOrderResponse();
+//
+//        result.stream()
+//                .limit(100)
+//                .forEach(x ->
+//                        log.info("주문번호 : {}, 제품명: {}, 고객명 : {}",
+//                                x.getOrderId(), x.getProductName(), x.getUserName()));
+//    }
+
+    // Many To One Test
+//    @Test
+//    @DisplayName("주문 조회 / 조회 후 회원 정보 확인")
+//    @Transactional // 안 붙여주면 fetch Type이 LAZY일 때 User 정보 가져올 때 오류 발생
+//    void findOrderAndUserTest() {
+//        UserOrder order = orderRepository.findById(1L)
+//                .orElseThrow();
+//
+//        // 주문 조회
+////        log.info(" : {}", order.);
+//        log.info("order id : {}", order.getId());
+//        log.info("제품명 : {}", order.getProductName());
+//        log.info("가격 : {}", order.getPrice());
+//        log.info("배송상태 : {}", order.getStatus());
+//
+//
+//        // 회원 정보 확인
+//        log.info("user_id : {}", order.getUser().getId());
+//        log.info("고객명 : {}", order.getUser().getName());
+//        log.info("이메일 : {}", order.getUser().getEmail());
+//        log.info("성별 : {}", order.getUser().getGender());
+//        log.info("좋아하는 색 : {}", order.getUser().getLikeColor());
+//    }
+
 
     // 주문 상태에 따른 오름차순 정렬 후 제품명에 대해 내림차순 정렬 후, 주문일 내림차순 1000개 출력
     @Test
@@ -94,32 +135,32 @@ class UserOrderRepositoryTest {
             log.info("product_name = {}, price = {}, Reference price = {}", order.getProductName(), order.getPrice(), price);
     }
 
-    @Test
-    @DisplayName("user_id로 주문 정보 조회")
-    void findByUserId() {
-        Long userId = 10L;
+//    @Test
+//    @DisplayName("user_id로 주문 정보 조회")
+//    void findByUserId() {
+//        Long userId = 10L;
+//
+//        List<UserOrder> userOrders = orderRepository.findByUserId(userId);
+//
+//        log.info("order count = {}", userOrders.size());
+//
+//        for (UserOrder order : userOrders)
+//            log.info("product_name = {}, userId = {}", order.getProductName(), order.getUserId());
+//    }
 
-        List<UserOrder> userOrders = orderRepository.findByUserId(userId);
-
-        log.info("order count = {}", userOrders.size());
-
-        for (UserOrder order : userOrders)
-            log.info("product_name = {}, userId = {}", order.getProductName(), order.getUserId());
-    }
-
-    @Test
-    @DisplayName("user_id와 주문 상태로 조회")
-    void findByUserIdAndStatus() {
-        Long userId = 10L;
-        OrderStatus status = OrderStatus.COMPLETE;
-
-        List<UserOrder> userOrders = orderRepository.findByUserIdAndStatus(userId, status);
-
-        log.info("order count = {}", userOrders.size());
-
-        for (UserOrder order : userOrders)
-            log.info("product_name = {}, userId = {}, status = {}", order.getProductName(), order.getUserId(), order.getStatus());
-    }
+//    @Test
+//    @DisplayName("user_id와 주문 상태로 조회")
+//    void findByUserIdAndStatus() {
+//        Long userId = 10L;
+//        OrderStatus status = OrderStatus.COMPLETE;
+//
+//        List<UserOrder> userOrders = orderRepository.findByUserIdAndStatus(userId, status);
+//
+//        log.info("order count = {}", userOrders.size());
+//
+//        for (UserOrder order : userOrders)
+//            log.info("product_name = {}, userId = {}, status = {}", order.getProductName(), order.getUserId(), order.getStatus());
+//    }
 
     @Test
     @DisplayName("가격 범위 조회")
