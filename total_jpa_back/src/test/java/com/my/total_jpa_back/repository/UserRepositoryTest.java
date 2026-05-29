@@ -1,6 +1,7 @@
 package com.my.total_jpa_back.repository;
 
 import com.my.total_jpa_back.common.entity.Gender;
+import com.my.total_jpa_back.orders.entity.UserOrder;
 import com.my.total_jpa_back.users.entity.Users;
 import com.my.total_jpa_back.users.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +22,54 @@ class UserRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
+
+//    @Test
+//    @Transactional
+//    @DisplayName("JPQL로 N+1 해결")
+//    void joinTest(){
+//        List<Users> users = userRepository.findAllWithOrders();
+//
+//        for (Users user : users){
+//            log.info("회원명: {}", user.getName());
+//            for (UserOrder order : user.getOrders()){
+//                log.info("주문번호 : {}, 제품명: {}",order.getId(), order.getProductName() );
+//            }
+//        }
+//    }
+
+//    @Test
+//    @DisplayName("N+1 문제")
+//    @Transactional
+//    void nPlusOneTest() {
+//        List<Users> users = userRepository.findAll();
+//
+//        // 회원수 500명 조회하면 500번의 주문정보 조회 쿼리가 추가됨 => N+1 : 500(주문정보) + 1(전체회원조회)
+//        for (Users user : users){
+//            log.info("회원명: {}", user.getName());
+//            for (UserOrder order : user.getOrders()){
+//                log.info("주문번호 : {}, 제품명: {}",order.getId(), order.getProductName() );
+//            }
+//        }
+//    }
+
+    // 회원정보 조회 후 주문 정보 조회
+//    @Test
+//    @DisplayName("회원정보 조회 후 주문 정보 조회")
+//    @Transactional // 안 붙여주면 fetch Type이 LAZY일 때 UserOrder 정보 가져올 때 오류 발생
+//    void findUserAndOrderTest() {
+//        Users user = userRepository.findById(1L)
+//                .orElseThrow();
+//
+//        // 회원 정보 조회
+//        log.info("이름 : {}", user.getName());
+//        log.info("이메일 : {}", user.getEmail());
+//
+//        // 주문 정보 조회
+//        for (UserOrder order : user.getOrders()) {
+//            log.info("주문 제품명 : {}", order.getProductName());
+//            log.info("주문 제품 가격 : {}", order.getPrice());
+//        }
+//    }
 
     // Slice : 무한 스크롤 용으로 자료가 필요할 때 사용
     // 장점 : 가볍다(가지고 있는 정보가 적다) - 다음 페이지가 있는지만 가지고 있음

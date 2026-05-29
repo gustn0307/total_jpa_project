@@ -2,12 +2,98 @@ package com.my.total_jpa_back.orders.repository;
 
 
 import com.my.total_jpa_back.common.entity.OrderStatus;
+import com.my.total_jpa_back.orders.dto.OrderMultiSearchResponse;
+import com.my.total_jpa_back.orders.dto.OrderResponse;
 import com.my.total_jpa_back.orders.entity.UserOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface UserOrderRepository extends JpaRepository<UserOrder, Long> {
+
+    // 1번 문제
+    // OrderResponse DTO로 결과 받기
+    // 1. 주문상태가 COMPLETE인 것만 조회
+    // 2. 요청 GET url : localhost:8080/apu/status
+    // 3. 서비스 생성
+    // 4. post man으로 결과 확인
+    @Query("""
+                select new com.my.total_jpa_back.orders.dto.OrderResponse (
+                       o.id,
+                       o.productName,
+                       o.price,
+                       u.name,
+                       o.status
+                    )
+                from UserOrder o
+                join o.user u
+                where o.status = :status
+            """)
+    List<OrderResponse> findOrderResponseByStatus(@Param("status") OrderStatus status);
+
+    // 2번 문제
+    // OrderResponse DTO로 결과 받기
+    // 1. COMPLETE 상태
+    // 2. price >= 100000
+    // 3. 이름에 Kim 포함
+    // 4. 최신순 정렬
+    // 5. 요청 GET url : localhost:8080/apu/status
+    // 6. 서비스 생성
+    // 7. post man으로 결과 확인
+    @Query("""
+                select new com.my.total_jpa_back.orders.dto.OrderMultiSearchResponse (
+                       o.id,
+                       o.productName,
+                       o.price,
+                       u.name,
+                       o.status,
+                       u.name,
+                       u.email
+                    )
+                from UserOrder o
+                join o.user u
+                where o.status = :status and o.price >= :price and u.name like %:keyword%
+                order by o.createdAt desc
+            """)
+    List<OrderMultiSearchResponse> findResponseBySeveral(
+            @Param("status") OrderStatus status,
+            @Param("price") Integer price,
+            @Param("keyword") String keyword
+    );
+
+    // 3번 문제
+    // 1. 특정 userId의 주문정보를 조회
+    // 2. http://localhost:8080/api/users/1/orders
+    @Query("""
+                select new com.my.total_jpa_back.orders.dto.OrderResponse (
+                       o.id,
+                       o.productName,
+                       o.price,
+                       u.name,
+                       o.status
+                    )
+                from UserOrder o
+                join o.user u
+                where u.id = :userId
+            """)
+    List<OrderResponse> findOrderResponseByUserId(@Param("userId") Long userId);
+
+
+    // DTO로 받을 때 경로를 포함해서 생성자로 적어준다.
+//    @Query("""
+//                select new com.my.total_jpa_back.orders.dto.OrderResponse (
+//                       o.id,
+//                       o.productName,
+//                       o.price,
+//                       u.name
+//                    )
+//                    from UserOrder o
+//                        join o.user u
+//            """)
+//    List<OrderResponse> findOrderResponse();
+
     // 1. 전체 주문 조회
     // select * from user_order;
 
