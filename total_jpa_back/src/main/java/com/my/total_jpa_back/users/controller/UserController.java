@@ -1,5 +1,6 @@
 package com.my.total_jpa_back.users.controller;
 
+import com.my.total_jpa_back.common.dto.PageResponse;
 import com.my.total_jpa_back.common.entity.Gender;
 import com.my.total_jpa_back.common.exception.UserNotFoundException;
 import com.my.total_jpa_back.users.dto.*;
@@ -22,6 +23,21 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final UserService userService;
+
+    // Page -> DTO 로 return
+    @GetMapping("/getPage")
+    public PageResponse<UserResponse> findPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size ){
+
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("createdAt").descending()
+        );
+
+        return userService.findPage(pageable);
+    }
 
     // User 삭제 처리 API
     @DeleteMapping("/users/{id}")
