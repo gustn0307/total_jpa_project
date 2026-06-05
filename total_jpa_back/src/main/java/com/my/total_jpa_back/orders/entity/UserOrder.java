@@ -6,10 +6,12 @@ import com.my.total_jpa_back.users.entity.Users;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "user_order")
 public class UserOrder extends BaseEntity {
     @Id
